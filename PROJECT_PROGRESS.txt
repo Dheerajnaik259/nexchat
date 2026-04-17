@@ -1,0 +1,262 @@
+╔══════════════════════════════════════════════════════════════════╗
+║                  NEXCHAT — PROJECT PROGRESS REPORT              ║
+║                     Last Updated: 17 April 2026                 ║
+╚══════════════════════════════════════════════════════════════════╝
+
+
+════════════════════════════════════════════════════════════════════
+  OVERALL PROGRESS:  ~40% Complete  |  APP IS RUNNING ✅
+════════════════════════════════════════════════════════════════════
+
+
+┌──────────────────────────────────────────────────────────────────┐
+│  ✅  COMPLETED                                                  │
+└──────────────────────────────────────────────────────────────────┘
+
+1. PROJECT SCAFFOLDING                                     ✅ 100%
+   - Feature-first clean architecture folder structure
+   - All stub files for every screen, widget, model, service
+   - pubspec.yaml with all dependencies (Supabase, Riverpod, etc.)
+   - Theme system (colors, gradients, text styles)
+   - Custom reusable widgets (GlassContainer, CustomButton, etc.)
+
+2. SUPABASE CONFIGURATION                                  ✅ 100%
+   - supabase_config.dart with project URL + anon key
+   - main.dart initialized with Supabase.initialize()
+   - Firebase fully removed (all dependencies + config files)
+
+3. DATA MODELS                                              ✅ 100%
+   - UserModel          (users table)
+   - MessageModel       (messages table)
+   - ChatModel           (chats table)
+   - CallModel           (calls table)
+   - StatusModel         (status table)
+   - PollModel           (polls table)
+   - ScheduledMessageModel (scheduled_messages table)
+   - ContactModel        (local contacts)
+   - NotificationModel   (local notifications)
+   All models use DateTime + snake_case JSON for PostgreSQL.
+
+4. SUPABASE SERVICE LAYER                                   ✅ 100%
+   - AuthService         (email+password sign up/in, phone OTP, profile CRUD)
+   - DatabaseService     (CRUD + real-time streams for all entities)
+   - StorageService      (avatar, chat media, status media upload/download)
+
+5. RIVERPOD PROVIDERS                                       ✅ 100%
+   - auth_provider       (auth state stream)
+   - chat_provider       (real-time chat list)
+   - message_provider    (real-time messages with pagination)
+   - status_provider     (status list)
+
+6. AUTH SCREENS (UI + Logic)                                ✅ 100%
+   - Splash Screen       (auto-login check via Supabase session)
+   - Onboarding Screen   (3-page animated walkthrough)
+   - Email Auth Screen   (sign up / sign in with email+password)
+   - OTP Screen          (ready for when phone auth is enabled)
+   - Profile Setup       (name, username, bio → Supabase users table)
+
+7. HOME SCREEN (UI + Logic)                                 ✅ 80%
+   - Tab bar (Chats / Calls / Status)
+   - Chats tab connected to real-time Supabase stream
+   - Calls tab (empty state UI only)
+   - Status tab (empty state UI only)
+
+8. SQL DATABASE SCHEMA                                      ✅ 100%
+   - 7 tables with proper indexes
+   - Row Level Security (RLS) policies
+   - 4 RPC helper functions
+   - Realtime enabled on all tables
+
+9. ENCRYPTION SERVICES                                      ✅ 100%
+   - EncryptionService   (AES-256-GCM + RSA-2048 OAEP)
+   - SignalProtocolService (Double Ratchet, X3DH key exchange)
+   - KeyStore            (Hive-based encrypted key storage)
+
+10. APP ROUTER                                              ✅ 100%
+    - GoRouter with 25+ routes configured
+    - All screens mapped to route constants
+
+
+┌──────────────────────────────────────────────────────────────────┐
+│  ⏳  REMAINING                                                  │
+└──────────────────────────────────────────────────────────────────┘
+
+1. CHAT DETAIL SCREEN                                       ⏳ 0%
+   - Message list with real-time updates
+   - Message input bar (text, emoji, attachments)
+   - Message bubbles (sent/received styling)
+   - Read receipts (double tick)
+   - Typing indicator
+   - Reply, forward, delete actions
+   - Image/video/audio message display
+
+2. GROUP CHAT                                               ⏳ 0%
+   - Group creation flow
+   - Group info screen
+   - Add/remove members
+   - Admin controls
+   - Group settings
+
+3. CALLS (WebRTC)                                           ⏳ 0%
+   - Voice call screen
+   - Video call screen
+   - Incoming call screen
+   - Call history
+   - WebRTC signaling via Supabase Realtime
+
+4. STATUS / STORIES                                         ⏳ 0%
+   - Status creation (text + image)
+   - Status viewer with progress bar
+   - Status list with ring indicators
+   - 24-hour auto-expiry
+
+5. CONTACTS                                                 ⏳ 0%
+   - Contact sync from phone
+   - Contact search
+   - Contact profile view
+   - Block/unblock
+
+6. SETTINGS                                                 ⏳ 0%
+   - Profile editing
+   - Privacy settings
+   - Notification settings
+   - Chat backup
+   - Storage management
+   - Security (fingerprint lock, 2FA)
+
+7. NOTIFICATIONS                                            ⏳ 0%
+   - Push notifications (FCM or Supabase Edge Functions)
+   - Local notifications
+   - Notification settings per chat
+
+8. MEDIA HANDLING                                           ⏳ 0%
+   - Image picker + cropper
+   - Camera capture
+   - Video recording
+   - Voice note recording
+   - File sharing
+   - Media gallery viewer
+
+
+┌──────────────────────────────────────────────────────────────────┐
+│  🔧  ACTION REQUIRED BY YOU (Manual Steps)                      │
+└──────────────────────────────────────────────────────────────────┘
+
+Supabase Dashboard: https://supabase.com/dashboard/project/fqsrstkkaptupijcndvf
+
+STEP 1: Run SQL Schema                                    ✅ DONE
+   → SQL Editor → Pasted 001_initial_schema.sql → "Success. No rows returned"
+
+STEP 2: Enable Anonymous Auth                             ✅ DONE
+   → Authentication → Settings → "Allow anonymous sign-ins" → ON
+
+STEP 3: Create Storage Buckets                             ✅ DONE
+   → avatars (PUBLIC), chat-media (PRIVATE), status-media (PUBLIC)
+
+STEP 4: Test the App                                       ✅ DONE
+   → flutter run -d chrome → App running at http://127.0.0.1:8080
+   → Splash → Onboarding → Email Auth / Quick Start screen
+
+STEP 5: Enable Email Auth (Optional, for email sign-up)   ⏳ PENDING
+   → Authentication → Providers → Email → Enable → Turn OFF "Confirm email"
+
+STEP 6: Enable Phone Auth (Optional, for OTP)             ⏳ PENDING
+   → Authentication → Providers → Phone → Enable → Add Twilio credentials
+
+
+┌──────────────────────────────────────────────────────────────────┐
+│  📊  SUMMARY                                                     │
+└──────────────────────────────────────────────────────────────────┘
+
+  Infrastructure & Config .............. ✅ Done
+  Data Models .......................... ✅ Done
+  Backend Services ..................... ✅ Done
+  Auth Flow (UI + Logic) ............... ✅ Done
+  Home Screen .......................... ✅ Done (basic)
+  Chat Detail Screen ................... ⏳ Not started
+  Group Chat ........................... ⏳ Not started
+  Voice/Video Calls .................... ⏳ Not started
+  Status/Stories ....................... ⏳ Not started
+  Contacts ............................. ⏳ Not started
+  Settings ............................. ⏳ Not started
+  Push Notifications ................... ⏳ Not started
+  Media Handling ....................... ⏳ Not started
+
+  YOUR MANUAL STEPS: 4 of 6 done ✅  (2 optional pending)
+
+
+┌──────────────────────────────────────────────────────────────────┐
+│  📋  README SECTION-BY-SECTION PROGRESS (20 Sections)            │
+└──────────────────────────────────────────────────────────────────┘
+
+  COMPLETED SECTIONS (11 of 20):
+
+  Section  0 — Project Identity .................. ✅ Done
+  Section  1 — pubspec.yaml ...................... ✅ Done (migrated to Supabase)
+  Section  2 — Folder Structure .................. ✅ Done
+  Section  3 — Database Schema ................... ✅ Done (Supabase SQL)
+  Section  4 — Firebase → Supabase Setup ......... ✅ Done (fully migrated)
+  Section  5 — Models (Data Classes) ............. ✅ Done (all 9 models)
+  Section  6 — Encryption Service ................ ✅ Done (AES + RSA + Signal)
+  Section  7 — Authentication Module ............. ✅ Done (email + phone OTP)
+  Section 15 — Theme (Gen-Z Dark UI) ............. ✅ Done
+  Section 16 — Router (GoRouter) ................. ✅ Done (25+ routes)
+  Section 17 — main.dart ......................... ✅ Done
+
+  REMAINING SECTIONS (9 of 20):
+
+  Section  8 — Chat Engine ....................... ⏳ Next Priority
+  Section  9 — Media Service ..................... ⏳ Not started
+  Section 10 — Notifications Service ............. ⏳ Not started
+  Section 11 — Calls (WebRTC) .................... ⏳ Not started
+  Section 12 — Status / Stories .................. ⏳ Not started
+  Section 13 — Contact Sync ...................... ⏳ Not started
+  Section 14 — Cloud Functions ................... ⏳ Not started
+  Section 18 — Android Manifest .................. ⏳ Partial
+  Section 20 — Critical Rules .................... 📖 Reference only
+
+
+┌──────────────────────────────────────────────────────────────────┐
+│  🔢  BUILD ORDER PROGRESS (Section 19 — 60 Steps)               │
+└──────────────────────────────────────────────────────────────────┘
+
+  ✅  Step  1: Read entire spec                    DONE
+  ✅  Step  2: pubspec.yaml                        DONE
+  ✅  Step  3: Create all folders                  DONE
+  ✅  Step  4: Create all stub files               DONE
+  ✅  Step  5: Run flutter pub get                 DONE
+  ✅  Step  6: main.dart + app.dart                DONE
+  ✅  Step  7: AppColors + AppTheme                DONE
+  ✅  Step  8: All Models                          DONE
+  ✅  Step  9: Route constants                     DONE
+  ✅  Step 10: EncryptionService                   DONE
+  ✅  Step 11: DatabaseService (Supabase)          DONE
+  ✅  Step 12: StorageService (Supabase)           DONE
+  ✅  Step 13: AuthService (Supabase)              DONE
+  ✅  Step 14: SplashScreen                        DONE
+  ✅  Step 15: OnboardingScreen                    DONE
+  ✅  Step 16: EmailAuthScreen (was PhoneInput)    DONE
+  ✅  Step 17: OTPVerificationScreen               DONE
+  ✅  Step 18: ProfileSetupScreen                  DONE
+  ✅  Step 19: GoRouter                            DONE
+  ⏳  Step 20: HomeScreen tabs                     PARTIAL (chats connected)
+  ⏳  Step 21: ChatListTile widget                 DONE
+  ⏳  Step 22: ChatScreen (detail)                 NOT STARTED ← NEXT
+  ⏳  Step 23: MessageBubble widget                NOT STARTED
+  ⏳  Step 24: MessageInput widget                 NOT STARTED
+  ⏳  Step 25: ChatProvider (full)                 PARTIAL
+  ⏳  Step 26-30: Group chat screens               NOT STARTED
+  ⏳  Step 31-35: Status screens                   NOT STARTED
+  ⏳  Step 36-39: Contact screens                  NOT STARTED
+  ⏳  Step 40-44: Call screens (WebRTC)            NOT STARTED
+  ⏳  Step 45-49: Settings screens                 NOT STARTED
+  ⏳  Step 50-54: Profile screens                  NOT STARTED
+  ⏳  Step 55-56: Cloud Functions + Notifications  NOT STARTED
+  ⏳  Step 57-60: Testing + Polish                 NOT STARTED
+
+  Current Position: Step 22 of 60 (~37% through build order)
+
+
+════════════════════════════════════════════════════════════════════
+  The foundation is solid. Next priority: Chat Detail Screen.
+════════════════════════════════════════════════════════════════════
