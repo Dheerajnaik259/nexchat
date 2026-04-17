@@ -48,8 +48,13 @@ class AppColors {
   static const Color warning = Color(0xFFFFAB00);
   static const Color info = Color(0xFF4361EE);
 
+  // ── Surfaces ───────────────────────────────────────────
+  static const Color surfaceDark = Color(0xFF1E1E36);
+  static const Color surfaceLight = Color(0xFF2A2A42);
+
   // ── Misc ──────────────────────────────────────────────
   static const Color divider = Color(0xFF2A2A3E);
   static const Color shimmerBase = Color(0xFF1A1A2E);
   static const Color shimmerHighlight = Color(0xFF2A2A3E);
+  static const Color onlineDot = online;
 }
