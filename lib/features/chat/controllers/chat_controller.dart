@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../models/message_model.dart';
 import '../../../services/supabase/database_service.dart';
+import '../../../services/supabase/storage_service.dart';
 
 // ─── Chat Controller State ──────────────────────────────────
 
@@ -229,6 +231,67 @@ class ChatController extends StateNotifier<ChatState> {
     try {
       await _db.sendMessage(message);
       state = state.copyWith(isSending: false);
+    } catch (e) {
+      // Mark as failed
+      final idx = state.messages.indexWhere((m) => m.messageId == messageId);
+      if (idx != -1) {
+        final msgs = List<MessageModel>.from(state.messages);
+        msgs[idx] = msgs[idx].copyWith(status: MessageStatus.failed);
+        state = state.copyWith(messages: msgs, isSending: false);
+      }
+    }
+  }
+
+  // ─── Send Media Message ──────────────────────────────────
+  Future<void> sendMediaMessage(File file, MessageType type) async {
+    final messageId =
+        DateTime.now().millisecondsSinceEpoch.toString() +
+        currentUserId.substring(0, 4);
+
+    // Optimistic update with local file path preview
+    final initialMessage = MessageModel(
+      messageId: messageId,
+      chatId: chatId,
+      senderId: currentUserId,
+      type: type,
+      encryptedText: '', // Will be updated later if needed
+      encryptedMediaUrl: file.path, // Temporary local path
+      timestamp: DateTime.now(),
+      status: MessageStatus.sent,
+      replyToMessageId: state.replyTo?.messageId,
+    );
+
+    state = state.copyWith(
+      messages: [...state.messages, initialMessage],
+      isSending: true,
+      clearReplyTo: true,
+    );
+    _sendTyping(false);
+
+    try {
+      // 1. Upload to Supabase Storage
+      final uploadedUrl = await StorageService.instance.uploadChatMedia(
+        file: file,
+        chatId: chatId,
+      );
+
+      // 2. Finalize message and send to DB
+      final finalMessage = initialMessage.copyWith(
+        encryptedMediaUrl: uploadedUrl,
+      );
+
+      await _db.sendMessage(finalMessage);
+
+      // 3. Update local state with real URL
+      final idx = state.messages.indexWhere((m) => m.messageId == messageId);
+      if (idx != -1) {
+        final msgs = List<MessageModel>.from(state.messages);
+        msgs[idx] = finalMessage;
+        state = state.copyWith(messages: msgs, isSending: false);
+      } else {
+        state = state.copyWith(isSending: false);
+      }
+
     } catch (e) {
       // Mark as failed
       final idx = state.messages.indexWhere((m) => m.messageId == messageId);

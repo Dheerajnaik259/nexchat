@@ -1,4 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../models/message_model.dart';
@@ -158,14 +162,47 @@ class MessageBubble extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              height: 200,
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Center(
-                child: Icon(Icons.image_rounded, color: Colors.white38, size: 48),
+            GestureDetector(
+              onTap: () {
+                if (message.encryptedMediaUrl == null) return;
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => _FullScreenImageViewer(
+                    heroTag: message.messageId,
+                    url: message.encryptedMediaUrl!,
+                  ),
+                ));
+              },
+              child: Hero(
+                tag: message.messageId,
+                child: Container(
+                  constraints: const BoxConstraints(
+                    maxHeight: 300,
+                    maxWidth: 250,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: message.encryptedMediaUrl == null
+                    ? const Center(child: CircularProgressIndicator())
+                    : (message.encryptedMediaUrl!.startsWith('http')
+                        ? CachedNetworkImage(
+                            imageUrl: message.encryptedMediaUrl!,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => Container(
+                              color: AppColors.surfaceDark,
+                              child: const Center(
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              ),
+                            ),
+                            errorWidget: (context, url, error) => const Icon(Icons.error),
+                          )
+                        : Image.file(
+                            File(message.encryptedMediaUrl!),
+                            fit: BoxFit.cover,
+                          )),
+                ),
               ),
             ),
             if (message.encryptedText.isNotEmpty)
@@ -299,5 +336,36 @@ class MessageBubble extends StatelessWidget {
     final h = dt.hour.toString().padLeft(2, '0');
     final m = dt.minute.toString().padLeft(2, '0');
     return '$h:$m';
+  }
+}
+
+class _FullScreenImageViewer extends StatelessWidget {
+  final String heroTag;
+  final String url;
+
+  const _FullScreenImageViewer({required this.heroTag, required this.url});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+      extendBodyBehindAppBar: true,
+      body: Hero(
+        tag: heroTag,
+        child: PhotoView(
+          imageProvider: url.startsWith('http')
+              ? CachedNetworkImageProvider(url) as ImageProvider
+              : FileImage(File(url)),
+          minScale: PhotoViewComputedScale.contained,
+          maxScale: PhotoViewComputedScale.covered * 3,
+          backgroundDecoration: const BoxDecoration(color: Colors.black),
+        ),
+      ),
+    );
   }
 }

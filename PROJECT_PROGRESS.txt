@@ -5,7 +5,7 @@
 
 
 ════════════════════════════════════════════════════════════════════
-  OVERALL PROGRESS:  ~48% Complete  |  APP IS RUNNING ✅
+  OVERALL PROGRESS:  ~52% Complete  |  APP IS RUNNING ✅
 ════════════════════════════════════════════════════════════════════
 
 
@@ -85,6 +85,12 @@
    - Reply, forward, delete actions
    - Image/video/audio message display
 
+12. MEDIA SERVICE & HANDLING                                ✅ 80%
+    - MediaPickerService for image selection & compression
+    - Upload to Supabase Storage (chat-media bucket)
+    - MessageBubble UI updated for images
+    - Full-screen image viewing capability
+
 ┌──────────────────────────────────────────────────────────────────┐
 │  ⏳  REMAINING                                                  │
 └──────────────────────────────────────────────────────────────────┘
@@ -128,13 +134,10 @@
    - Local notifications
    - Notification settings per chat
 
-8. MEDIA HANDLING                                           ⏳ 0%
-   - Image picker + cropper
-   - Camera capture
-   - Video recording
-   - Voice note recording
-   - File sharing
-   - Media gallery viewer
+8. MEDIA HANDLING (Advanced)                                ⏳ 20%
+   - Video file sharing & recording
+   - Voice note recording & playback
+   - Document/File sharing
 
 
 ┌──────────────────────────────────────────────────────────────────┐
@@ -179,7 +182,7 @@ STEP 6: Enable Phone Auth (Optional, for OTP)             ⏳ PENDING
   Contacts ............................. ⏳ Not started
   Settings ............................. ⏳ Not started
   Push Notifications ................... ⏳ Not started
-  Media Handling ....................... ⏳ Not started
+  Media Handling ....................... ✅ Done (Images)
 
   YOUR MANUAL STEPS: 4 of 6 done ✅  (2 optional pending)
 
@@ -188,7 +191,7 @@ STEP 6: Enable Phone Auth (Optional, for OTP)             ⏳ PENDING
 │  📋  README SECTION-BY-SECTION PROGRESS (20 Sections)            │
 └──────────────────────────────────────────────────────────────────┘
 
-  COMPLETED SECTIONS (12 of 20):
+  COMPLETED SECTIONS (13 of 20):
 
   Section  0 — Project Identity .................. ✅ Done
   Section  1 — pubspec.yaml ...................... ✅ Done (migrated to Supabase)
@@ -203,9 +206,9 @@ STEP 6: Enable Phone Auth (Optional, for OTP)             ⏳ PENDING
   Section 16 — Router (GoRouter) ................. ✅ Done (25+ routes)
   Section 17 — main.dart ......................... ✅ Done
 
-  REMAINING SECTIONS (8 of 20):
+  REMAINING SECTIONS (7 of 20):
 
-  Section  9 — Media Service ..................... ⏳ Next Priority
+  Section  9 — Media Service ..................... ✅ Done (Images/Storage)
   Section 10 — Notifications Service ............. ⏳ Not started
   Section 11 — Calls (WebRTC) .................... ⏳ Not started
   Section 12 — Status / Stories .................. ⏳ Not started
@@ -253,9 +256,9 @@ STEP 6: Enable Phone Auth (Optional, for OTP)             ⏳ PENDING
   ⏳  Step 55-56: Cloud Functions + Notifications  NOT STARTED
   ⏳  Step 57-60: Testing + Polish                 NOT STARTED
 
-  Current Position: Step 26 of 60 (~43% through build order)
+  Current Position: Media Service integrated (~50% through build order)
 
 
 ════════════════════════════════════════════════════════════════════
-  Chat Engine is functional. Next priority: Group Chat / Media Service.
+  Chat Engine & Media Handling functional. Next priority: Group Chat / Contacts.
 ════════════════════════════════════════════════════════════════════

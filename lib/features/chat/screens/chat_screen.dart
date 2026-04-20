@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:image_picker/image_picker.dart';
+import '../../../services/media/media_picker_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../models/message_model.dart';
@@ -10,6 +12,7 @@ import '../widgets/message_bubble.dart';
 import '../widgets/message_input_bar.dart';
 import '../widgets/reply_preview_widget.dart';
 import '../widgets/typing_indicator.dart';
+import '../../../core/widgets/skeleton_loader.dart';
 
 /// Private 1:1 chat screen with real-time messaging
 class ChatScreen extends ConsumerStatefulWidget {
@@ -170,12 +173,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
           // Messages list
           Expanded(
             child: chatState.isLoading
-                ? const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.neonPurple,
-                      strokeWidth: 2,
-                    ),
-                  )
+                ? const MessageListSkeleton()
                 : chatState.messages.isEmpty
                     ? _buildEmptyState()
                     : _buildMessageList(chatState, controller),
@@ -209,6 +207,13 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
             },
             onAttachmentTap: () {
               _showAttachmentPicker();
+            },
+            onCameraTap: () async {
+              final file = await MediaPickerService.instance.pickImage(ImageSource.camera);
+              if (file != null) {
+                ref.read(chatControllerProvider(widget.chatId).notifier)
+                    .sendMediaMessage(file, MessageType.image);
+              }
             },
           ),
         ],
@@ -806,9 +811,23 @@ class _ChatScreenState extends ConsumerState<ChatScreen>
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _buildAttachIcon(Icons.photo_rounded, 'Gallery',
-                    AppColors.neonPurple, () => Navigator.pop(context)),
+                    AppColors.neonPurple, () async {
+                  Navigator.pop(context);
+                  final file = await MediaPickerService.instance.pickImage(ImageSource.gallery);
+                  if (file != null) {
+                    ref.read(chatControllerProvider(widget.chatId).notifier)
+                        .sendMediaMessage(file, MessageType.image);
+                  }
+                }),
                 _buildAttachIcon(Icons.camera_alt_rounded, 'Camera',
-                    AppColors.neonCyan, () => Navigator.pop(context)),
+                    AppColors.neonCyan, () async {
+                  Navigator.pop(context);
+                  final file = await MediaPickerService.instance.pickImage(ImageSource.camera);
+                  if (file != null) {
+                    ref.read(chatControllerProvider(widget.chatId).notifier)
+                        .sendMediaMessage(file, MessageType.image);
+                  }
+                }),
                 _buildAttachIcon(Icons.description_rounded, 'Document',
                     AppColors.neonOrange, () => Navigator.pop(context)),
                 _buildAttachIcon(Icons.location_on_rounded, 'Location',

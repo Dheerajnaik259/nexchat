@@ -10,6 +10,7 @@ import '../../../core/utils/date_utils.dart';
 import '../widgets/chat_list_tile.dart';
 import '../widgets/search_bar_widget.dart';
 import '../widgets/fab_menu_widget.dart';
+import '../../../core/widgets/skeleton_loader.dart';
 
 /// Home screen — TabBar: Chats / Calls / Status + bottom nav
 class HomeScreen extends StatefulWidget {
@@ -250,9 +251,7 @@ class _ChatsTab extends ConsumerWidget {
     final chatsAsync = ref.watch(chatListProvider);
 
     return chatsAsync.when(
-      loading: () => const Center(
-        child: CircularProgressIndicator(color: AppColors.neonPurple),
-      ),
+      loading: () => const ChatListSkeleton(),
       error: (e, _) => Center(
         child: Text('Error: $e', style: TextStyle(color: AppColors.error)),
       ),
